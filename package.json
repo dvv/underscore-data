@@ -1,0 +1,12 @@
+{
+  "name"          : "underscore-data",
+  "description"   : "Practical tools to manage schemaful mongodb documents",
+  "url"           : "https://github.com/dvv/underscore-data/",
+  "keywords"      : ["json", "schema", "underscore", "javascript", "mongodb", "rql"],
+  "author"        : "Vladimir Dronnikov <dronnikov@gmail.com>",
+  "contributors"  : [],
+  "dependencies"  : {"underscore": ""},
+  "lib"           : "lib",
+  "main"          : "index.js",
+  "version"       : "0.0.1"
+}
