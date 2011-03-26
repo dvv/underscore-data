@@ -109,6 +109,8 @@ _.mixin
 	#
 	# until every engine supports ECMA5, safe coercing to Date is evil
 	#
+	# TODO: consider https://github.com/timrwood/underscore.date
+	#
 	parseDate: (value) ->
 		date = new Date value
 		return date if _.isDate date

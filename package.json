@@ -6,7 +6,7 @@
   "author"        : "Vladimir Dronnikov <dronnikov@gmail.com>",
   "contributors"  : [],
   "dependencies"  : {"underscore": ""},
-  "lib"           : "lib",
-  "main"          : "index.js",
+  "lib"           : ".",
+  "main"          : "underscore-data.js",
   "version"       : "0.0.1"
 }
