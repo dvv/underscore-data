@@ -191,7 +191,7 @@ validate = (instance, schema, options = {}, callback) ->
 		null
 
 	# validate an object against a schema
-	checkObj = (instance, objTypeDef, path, additionalProp) ->
+	checkObj = (instance, objTypeDef = {}, path, additionalProp) ->
 
 		if _.isObject objTypeDef
 			if typeof instance isnt 'object' or _.isArray instance

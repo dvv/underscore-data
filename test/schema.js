@@ -5,6 +5,49 @@ $(document).ready(function(){
 	//
 
 	(function(){
+	var obj;
+
+	module('Validate: schema');
+
+	test('empty properties', function(){
+		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
+		equals(_.validate(obj, {
+			type: 'object',
+			properties: {
+			},
+			additionalProperties: true
+		}, {veto: true, removeAdditionalProps: false, flavor: 'add', coerce: true}),
+			null, 'coerced and added ok');
+		deepEqual(obj, {id: 'bac', foo: '4', bar: 'vareniki', spam: true}, 'schema ok');
+	});
+
+	test('undefined properties', function(){
+		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
+		equals(_.validate(obj, {
+			type: 'object',
+			additionalProperties: true
+		}, {veto: true, removeAdditionalProps: false, flavor: 'add', coerce: true}),
+			null, 'coerced and added ok');
+		deepEqual(obj, {id: 'bac', foo: '4', bar: 'vareniki', spam: true}, 'schema ok');
+	});
+
+	test('undefined properties and additionalProperties=false', function(){
+		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
+		equals(_.validate(obj, {
+			type: 'object',
+			additionalProperties: false
+		}, {veto: true, removeAdditionalProps: true, flavor: 'add', coerce: true}),
+			null, 'coerced and added ok');
+		deepEqual(obj, {id: 'bac', foo: '4', bar: 'vareniki', spam: true}, 'schema ok');
+	});
+
+	})();
+
+	//
+	////////////////////////////////////////////////////////////////////
+	//
+
+	(function(){
 	var schema, obj;
 
 	module('Validate: additionalProperties=false');

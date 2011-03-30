@@ -1065,6 +1065,9 @@
     };
     checkObj = function(instance, objTypeDef, path, additionalProp) {
       var i, propDef, requires, value, _ref, _ref2;
+      if (objTypeDef == null) {
+        objTypeDef = {};
+      }
       if (_.isObject(objTypeDef)) {
         if (typeof instance !== 'object' || _.isArray(instance)) {
           errors.push({
