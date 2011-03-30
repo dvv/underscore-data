@@ -30,6 +30,9 @@ $(document).ready(function(){
 				items: {
 					type: 'string',
 					'enum': ['eniki', 'beniki', 'eli', 'vareniki']
+				},
+				veto: {
+					query: true
 				}
 			},
 			defaulty: {
@@ -69,6 +72,13 @@ $(document).ready(function(){
 		deepEqual(obj, {id: 'bac', bar: ['eli', 'eniki']}, 'validate for "get" ok');
 	});
 
+	test('query', function(){
+		obj = {id: 'bac', foo: '5', bar: ['eli', 'eniki'], secret: true};
+		deepEqual(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'query'}),
+			null, 'validate for "query" ok');
+		deepEqual(obj, {id: 'bac', foo: '5'}, 'validate for "query" ok');
+	});
+
 	})();
 
 	//
@@ -101,6 +111,9 @@ $(document).ready(function(){
 				items: {
 					type: 'string',
 					'enum': ['eniki', 'beniki', 'eli', 'vareniki']
+				},
+				veto: {
+					query: true
 				}
 			},
 			defaulty: {
@@ -139,6 +152,13 @@ $(document).ready(function(){
 		deepEqual(obj, {id: 'bac', bar: ['eli', 'eniki'], secret: true}, 'validate for "get" ok');
 	});
 
+	test('query', function(){
+		obj = {id: 'bac', foo: '5', bar: ['eli', 'eniki'], secret: true};
+		deepEqual(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'query'}),
+			null, 'validate for "query" ok');
+		deepEqual(obj, {id: 'bac', foo: '5', secret: true}, 'validate for "query" ok');
+	});
+
 	})();
 
 	//
@@ -171,6 +191,10 @@ $(document).ready(function(){
 				items: {
 					type: 'string',
 					'enum': ['eniki', 'beniki', 'eli', 'vareniki']
+				}
+				,
+				veto: {
+					query: true
 				}
 			},
 			defaulty: {
@@ -213,6 +237,13 @@ $(document).ready(function(){
 		deepEqual(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'get'}),
 			null, 'validate for "get" ok');
 		deepEqual(obj, {id: 'bac', bar: ['eli', 'eniki'], secret: true}, 'validate for "get" ok');
+	});
+
+	test('query', function(){
+		obj = {id: 'bac', foo: '5', bar: ['eli', 'eniki'], secret: true};
+		deepEqual(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'query'}),
+			null, 'validate for "query" ok');
+		deepEqual(obj, {id: 'bac', foo: '5', secret: true}, 'validate for "query" ok');
 	});
 
 	})();

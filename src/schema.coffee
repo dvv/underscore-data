@@ -27,9 +27,9 @@
 #
 # we allow property definition to contain `veto` attribute to control whether to retain the property after validation 
 # if it's === true -- the property will be deleted
-# if it is a hash, it specifies the flavors of validation ('add', 'update', 'get') when the property is deleted
+# if it is a hash, it specifies the flavors of validation ('add', 'update', 'get', 'query') when the property is deleted
 #
-# E.g. veto: {get: true} means when validation is called with truthy options.veto and options.flavor == 'get', the property will be deleted 
+# E.g. veto: {get: true} means when validation is called with truthy options.veto and options.flavor === 'get', the property will be deleted 
 #
 
 #
@@ -204,8 +204,8 @@ validate = (instance, schema, options = {}, callback) ->
 				if options.veto and (propDef.veto is true or typeof propDef.veto is 'object' and propDef.veto[options.flavor])
 					delete instance[i]
 					continue
-				# done with validation if it is called for 'get' and no coercion needed
-				continue if options.flavor is 'get' and not options.coerce
+				# done with validation if it is called for 'get' or 'query' and no coercion needed
+				continue if options.flavor in ['query', 'get'] and not options.coerce
 				# set default if validation called for 'add'
 				if value is undefined and propDef.default? and options.flavor is 'add'
 					value = instance[i] = propDef.default

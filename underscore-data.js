@@ -1064,7 +1064,7 @@
       return null;
     };
     checkObj = function(instance, objTypeDef, path, additionalProp) {
-      var i, propDef, requires, value, _ref;
+      var i, propDef, requires, value, _ref, _ref2;
       if (_.isObject(objTypeDef)) {
         if (typeof instance !== 'object' || _.isArray(instance)) {
           errors.push({
@@ -1083,7 +1083,7 @@
             delete instance[i];
             continue;
           }
-          if (options.flavor === 'get' && !options.coerce) {
+          if (((_ref = options.flavor) === 'query' || _ref === 'get') && !options.coerce) {
             continue;
           }
           if (value === void 0 && (propDef["default"] != null) && options.flavor === 'add') {
@@ -1109,7 +1109,7 @@
             });
           }
         }
-        requires = (_ref = objTypeDef[i]) != null ? _ref.requires : void 0;
+        requires = (_ref2 = objTypeDef[i]) != null ? _ref2.requires : void 0;
         if (requires && !instance.hasOwnProperty(requires)) {
           errors.push({
             property: path,
