@@ -1096,6 +1096,9 @@
             value = coerce(value, propDef.type);
             instance[i] = value;
           }
+          if ('value' in propDef) {
+            value = instance[i] = propDef.value;
+          }
           checkProp(value, propDef, path, i);
         }
       }

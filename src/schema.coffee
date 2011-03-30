@@ -68,6 +68,14 @@ coerce = (value, type) ->
 #
 
 #
+# N.B. properties are by default required, use `optional: true` to override
+#
+
+#
+# N.B. we introduce `value` attribute which fixes the value of the property
+#
+
+#
 # TODO: introduce rename attribute -- id ---!get---> _id ---get---> id
 #
 
@@ -213,6 +221,10 @@ validate = (instance, schema, options = {}, callback) ->
 				if options.coerce and propDef.type and instance.hasOwnProperty i
 					value = coerce value, propDef.type
 					instance[i] = value
+				# set the value unconditionally if 'value' attribute specified
+				if 'value' of propDef
+					value = instance[i] = propDef.value
+				#
 				checkProp value, propDef, path, i
 
 		for i, value of instance

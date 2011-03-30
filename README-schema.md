@@ -72,7 +72,7 @@ Let us see how one can improve this schema using `veto` attribute to achieve the
         creditcardinfo: User.properties.creditcardinfo
         # ...
 
-The `veto` attribute is a hash of three boolean keys: `add`, `update`, 'get` representing the type of operation for which validation is performed. The usage pattern is as follows:
+The `veto` attribute is a boolean, or a hash of four boolean keys: `add`, `update`, `get`, `query` representing the type of operation for which validation is performed. The usage pattern is as follows:
 
 * to validate INPUT when adding new User record:
 

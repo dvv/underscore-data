@@ -9,6 +9,21 @@ $(document).ready(function(){
 
 	module('Validate: schema');
 
+	test('value attribute', function(){
+		obj = {id: 'bac', foo: '4'};
+		equals(_.validate(obj, {
+			type: 'object',
+			properties: {
+				foo: {
+					value: 'Зафиксировано'
+				}
+			},
+			additionalProperties: true
+		}, {veto: true, removeAdditionalProps: false, flavor: 'add', coerce: true}),
+			null, 'coerced and added ok');
+		deepEqual(obj, {id: 'bac', foo: 'Зафиксировано'}, 'schema ok');
+	});
+
 	test('empty properties', function(){
 		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
 		equals(_.validate(obj, {
