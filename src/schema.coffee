@@ -255,6 +255,8 @@ validate = (instance, schema, options = {}, callback) ->
 	if not _changing and instance?.$schema
 		checkProp instance, instance.$schema, '', ''
 
+	# TODO: extend async validators to query the property values?
+
 	# run async validators, if any
 	len = asyncs.length
 	if callback and len
