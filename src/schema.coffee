@@ -81,6 +81,9 @@ coerce = (value, type) ->
 
 validate = (instance, schema, options = {}, callback) ->
 
+	# save the context
+	self = @
+
 	# FIXME: what it is?
 	_changing = options.changing
 
@@ -187,9 +190,12 @@ validate = (instance, schema, options = {}, callback) ->
 						# async validator
 						if enumeration.length is 2
 							asyncs.push value: value, path: path, fetch: enumeration
+						# sync validator
+						else if enumeration.length is 1
+							addError 'enum' unless enumeration.call(self, value)
 						# sync getter
 						else
-							enumeration = enumeration.call @
+							enumeration = enumeration.call self
 							addError 'enum' unless _.include enumeration, value
 					else
 						# simple array
@@ -260,11 +266,9 @@ validate = (instance, schema, options = {}, callback) ->
 	# run async validators, if any
 	len = asyncs.length
 	if callback and len
-		# N.B. 'this' contains valuable context
-		context = @
 		for async, i in asyncs
 			do (async) ->
-				async.fetch.call context, async.value, (err) ->
+				async.fetch.call self, async.value, (err) ->
 					if err
 						errors.push property: async.path, message: 'enum'
 					len -= 1

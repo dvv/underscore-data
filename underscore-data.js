@@ -905,10 +905,11 @@
     return value;
   };
   validate = function(instance, schema, options, callback) {
-    var async, asyncs, checkObj, checkProp, context, errors, i, len, _changing, _fn, _len;
+    var async, asyncs, checkObj, checkProp, errors, i, len, self, _changing, _fn, _len;
     if (options == null) {
       options = {};
     }
+    self = this;
     _changing = options.changing;
     asyncs = [];
     errors = [];
@@ -1044,8 +1045,12 @@
                   path: path,
                   fetch: enumeration
                 });
+              } else if (enumeration.length === 1) {
+                if (!enumeration.call(self, value)) {
+                  addError('enum');
+                }
               } else {
-                enumeration = enumeration.call(this);
+                enumeration = enumeration.call(self);
                 if (!_.include(enumeration, value)) {
                   addError('enum');
                 }
@@ -1143,9 +1148,8 @@
     }
     len = asyncs.length;
     if (callback && len) {
-      context = this;
       _fn = function(async) {
-        return async.fetch.call(context, async.value, function(err) {
+        return async.fetch.call(self, async.value, function(err) {
           if (err) {
             errors.push({
               property: async.path,
