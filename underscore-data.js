@@ -1084,6 +1084,9 @@
           if (!__hasProp.call(objTypeDef, i)) continue;
           propDef = objTypeDef[i];
           value = instance[i];
+          if ('value' in propDef) {
+            value = instance[i] = propDef.value;
+          }
           if (value === void 0 && options.existingOnly) {
             continue;
           }
@@ -1104,9 +1107,6 @@
           if (options.coerce && propDef.type && instance.hasOwnProperty(i)) {
             value = coerce(value, propDef.type);
             instance[i] = value;
-          }
-          if ('value' in propDef) {
-            value = instance[i] = propDef.value;
           }
           checkProp(value, propDef, path, i);
         }

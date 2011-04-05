@@ -73,6 +73,42 @@ $(document).ready(function(){
 		deepEqual(obj, {}, 'schema ok');
 	});
 
+	test('fixed values', function(){
+		obj = {foo: 'baz'};
+		equals(_.validate(obj, {
+			type: 'object',
+			properties: {
+				foo: {
+					type: 'string',
+					value: 'bar',
+					veto: {
+						update: true
+					}
+				}
+			},
+			additionalProperties: false
+		}, {veto: true, removeAdditionalProps: true, flavor: 'add', coerce: true}),
+			null, 'fixed values fixed ok');
+		deepEqual(obj, {foo: 'bar'}, 'schema ok');
+		//
+		obj = {};
+		equals(_.validate(obj, {
+			type: 'object',
+			properties: {
+				foo: {
+					type: 'string',
+					value: 'bar',
+					veto: {
+						update: true
+					}
+				}
+			},
+			additionalProperties: false
+		}, {veto: true, removeAdditionalProps: true, flavor: 'add', coerce: true}),
+			null, 'fixed values fixed ok');
+		deepEqual(obj, {foo: 'bar'}, 'schema ok');
+	});
+
 	})();
 
 	//

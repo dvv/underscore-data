@@ -212,6 +212,9 @@ validate = (instance, schema, options = {}, callback) ->
 				errors.push property: path, message: 'type'
 			for own i, propDef of objTypeDef
 				value = instance[i]
+				# set the value unconditionally if 'value' attribute specified
+				if 'value' of propDef
+					value = instance[i] = propDef.value
 				# skip _not_ specified properties
 				continue if value is undefined and options.existingOnly
 				# veto props
@@ -231,9 +234,6 @@ validate = (instance, schema, options = {}, callback) ->
 				if options.coerce and propDef.type and instance.hasOwnProperty i
 					value = coerce value, propDef.type
 					instance[i] = value
-				# set the value unconditionally if 'value' attribute specified
-				if 'value' of propDef
-					value = instance[i] = propDef.value
 				#
 				checkProp value, propDef, path, i
 
