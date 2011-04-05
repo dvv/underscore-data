@@ -1097,6 +1097,10 @@
           if (value === void 0 && (propDef["default"] != null) && options.flavor === 'add') {
             value = instance[i] = propDef["default"];
           }
+          if (value === void 0) {
+            delete instance[i];
+            continue;
+          }
           if (options.coerce && propDef.type && instance.hasOwnProperty(i)) {
             value = coerce(value, propDef.type);
             instance[i] = value;

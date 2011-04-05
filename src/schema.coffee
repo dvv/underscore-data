@@ -153,7 +153,7 @@ validate = (instance, schema, options = {}, callback) ->
 				addError 'required'
 		else
 			errors = errors.concat checkType schema.type, value
-			if schema.disallow and not checkType(schema.disallow,value).length
+			if schema.disallow and not checkType(schema.disallow, value).length
 				addError 'disallowed'
 			if value isnt null
 				if _.isArray value
@@ -223,6 +223,10 @@ validate = (instance, schema, options = {}, callback) ->
 				# set default if validation called for 'add'
 				if value is undefined and propDef.default? and options.flavor is 'add'
 					value = instance[i] = propDef.default
+				# throw undefined properties
+				if value is undefined
+					delete instance[i]
+					continue
 				# coerce if coercion is enabled
 				if options.coerce and propDef.type and instance.hasOwnProperty i
 					value = coerce value, propDef.type

@@ -56,6 +56,23 @@ $(document).ready(function(){
 		deepEqual(obj, {id: 'bac', foo: '4', bar: 'vareniki', spam: true}, 'schema ok');
 	});
 
+	test('greedy coercion for optionals', function(){
+		obj = {foo: undefined};
+		equals(_.validate(obj, {
+			type: 'object',
+			properties: {
+				foo: {
+					type: 'string',
+					pattern: /^aaa$/,
+					optional: true
+				}
+			},
+			additionalProperties: true
+		}, {veto: true, removeAdditionalProps: false, flavor: 'add', coerce: true}),
+			null, 'optionals not coerced ok');
+		deepEqual(obj, {}, 'schema ok');
+	});
+
 	})();
 
 	//
