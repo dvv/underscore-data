@@ -877,7 +877,7 @@
       value = value ? '' + value : '';
     } else if (type === 'number' || type === 'integer') {
       if (!_.isNaN(value)) {
-        value = +value;
+        value = Number(value);
         if (type === 'integer') {
           value = Math.floor(value);
         }

@@ -42,7 +42,7 @@ coerce = (value, type) ->
 		value = if value then ''+value else ''
 	else if type in ['number', 'integer']
 		unless _.isNaN value
-			value = +value;
+			value = Number value
 			value = Math.floor value if type is 'integer'
 	else if type is 'boolean'
 		value = if value is 'false' then false else not not value
