@@ -57,7 +57,7 @@ $(document).ready(function(){
 	});
 
 	test('greedy coercion for optionals', function(){
-		obj = {foo: undefined};
+		obj = {foo: undefined, bar: null};
 		equals(_.validate(obj, {
 			type: 'object',
 			properties: {
@@ -65,12 +65,14 @@ $(document).ready(function(){
 					type: 'string',
 					pattern: /^aaa$/,
 					optional: true
+				},
+				bar: {
 				}
 			},
 			additionalProperties: true
 		}, {veto: true, removeAdditionalProps: false, flavor: 'add', coerce: true}),
 			null, 'optionals not coerced ok');
-		deepEqual(obj, {}, 'schema ok');
+		deepEqual(obj, {bar: null}, 'schema ok');
 	});
 
 	test('fixed values', function(){
@@ -160,9 +162,14 @@ $(document).ready(function(){
 			null, 'coerced and added ok');
 		//console.log(obj.defaulty, _.parseDate('2011-02-14'));
 		deepEqual(obj, {id: 'bac', foo: 4, bar: ['vareniki'], defaulty: _.parseDate('2011-02-14')}, 'coerced for "add" ok');
+		//
 		obj = {id: 'bac1', foo: 'a', bar: 'pelmeshki'};
 		deepEqual(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
 			[{property: 'id', message: 'pattern'}, {'property': 'foo', 'message': 'type'}, {'property': 'bar[0]', 'message': 'enum'}], 'validate for "add"');
+		//
+		obj = {id: 'bac'};
+		deepEqual(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
+			[{'property': 'foo', 'message': 'required'}, {'property': 'bar', 'message': 'required'}], 'validate for "add"');
 	});
 
 	test('update', function(){

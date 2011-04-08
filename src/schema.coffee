@@ -226,14 +226,18 @@ validate = (instance, schema, options = {}, callback) ->
 				# set default if validation called for 'add'
 				if value is undefined and propDef.default? and options.flavor is 'add'
 					value = instance[i] = propDef.default
-				# throw undefined properties
-				if value is undefined
+				# throw undefined properties, unless 'add' flavor
+				if value is undefined and options.flavor isnt 'add'
 					delete instance[i]
 					continue
-				# coerce if coercion is enabled
-				if options.coerce and propDef.type and instance.hasOwnProperty i
+				# coerce if coercion is enabled and value is not undefined
+				if options.coerce and propDef.type and instance.hasOwnProperty(i) and value isnt undefined
 					value = coerce value, propDef.type
 					instance[i] = value
+				# remove undefined properties if they are optional
+				if value is undefined and propDef.optional
+					delete instance[i]
+					continue
 				#
 				checkProp value, propDef, path, i
 

@@ -1100,13 +1100,17 @@
           if (value === void 0 && (propDef["default"] != null) && options.flavor === 'add') {
             value = instance[i] = propDef["default"];
           }
-          if (value === void 0) {
+          if (value === void 0 && options.flavor !== 'add') {
             delete instance[i];
             continue;
           }
-          if (options.coerce && propDef.type && instance.hasOwnProperty(i)) {
+          if (options.coerce && propDef.type && instance.hasOwnProperty(i) && value !== void 0) {
             value = coerce(value, propDef.type);
             instance[i] = value;
+          }
+          if (value === void 0 && propDef.optional) {
+            delete instance[i];
+            continue;
           }
           checkProp(value, propDef, path, i);
         }
