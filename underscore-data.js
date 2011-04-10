@@ -1069,7 +1069,7 @@
       return null;
     };
     checkObj = function(instance, objTypeDef, path, additionalProp) {
-      var i, propDef, requires, value, _ref, _ref2;
+      var i, propDef, requires, value, _ref, _ref2, _ref3;
       if (objTypeDef == null) {
         objTypeDef = {};
       }
@@ -1084,7 +1084,7 @@
           if (!__hasProp.call(objTypeDef, i)) continue;
           propDef = objTypeDef[i];
           value = instance[i];
-          if ('value' in propDef) {
+          if ('value' in propDef && ((_ref = options.flavor) === 'add' || _ref === 'update')) {
             value = instance[i] = propDef.value;
           }
           if (value === void 0 && options.existingOnly) {
@@ -1094,7 +1094,7 @@
             delete instance[i];
             continue;
           }
-          if (((_ref = options.flavor) === 'query' || _ref === 'get') && !options.coerce) {
+          if (((_ref2 = options.flavor) === 'query' || _ref2 === 'get') && !options.coerce) {
             continue;
           }
           if (value === void 0 && (propDef["default"] != null) && options.flavor === 'add') {
@@ -1128,7 +1128,7 @@
             });
           }
         }
-        requires = (_ref2 = objTypeDef[i]) != null ? _ref2.requires : void 0;
+        requires = (_ref3 = objTypeDef[i]) != null ? _ref3.requires : void 0;
         if (requires && !instance.hasOwnProperty(requires)) {
           errors.push({
             property: path,

@@ -212,8 +212,8 @@ validate = (instance, schema, options = {}, callback) ->
 				errors.push property: path, message: 'type'
 			for own i, propDef of objTypeDef
 				value = instance[i]
-				# set the value unconditionally if 'value' attribute specified
-				if 'value' of propDef
+				# set the value unconditionally if 'value' attribute specified, if 'add' and 'update' flavors
+				if 'value' of propDef and options.flavor in ['add', 'update']
 					value = instance[i] = propDef.value
 				# skip _not_ specified properties
 				continue if value is undefined and options.existingOnly
