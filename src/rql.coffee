@@ -60,7 +60,7 @@ class Query
 		# convert FIQL to normalized call syntax form
 		query = query.replace /(\([\+\*\$\-:\w%\._,]+\)|[\+\*\$\-:\w%\._]*|)([<>!]?=(?:[\w]*=)?|>|<)(\([\+\*\$\-:\w%\._,]+\)|[\+\*\$\-:\w%\._]*|)/g, (t, property, operator, value) ->
 			if operator.length < 3
-				throw new URIError 'Illegal operator ' + operator unless operatorMap.hasOwnProperty operator
+				throw new URIError 'Illegal operator ' + operator unless operator of operatorMap
 				operator = operatorMap[operator]
 			else
 				operator = operator.substring 1, operator.length - 1
@@ -77,7 +77,7 @@ class Query
 					if not term.name
 						term.name = op
 					else if term.name isnt op
-						throw new Error 'Can not mix conjunctions within a group, use parenthesis around each set of same conjuctions (& and |)'
+						throw new Error 'Cannot mix conjunctions within a group, use parenthesis around each set of same conjuctions (& and |)'
 			if openParen
 				newTerm = new Query()
 				newTerm.name = propertyOrValue
@@ -231,7 +231,10 @@ class Query
 		if options.select
 			options.fields = options.select
 			delete options.select
-		meta: options, search: search
+		result =
+			meta: options, search: search
+		result.error = @error if @error
+		result
 
 stringToValue = (string, parameters) ->
 	converter = converters.default
@@ -302,7 +305,7 @@ autoConverted =
 #
 converters =
 	auto: (string) ->
-		if autoConverted.hasOwnProperty string
+		if string of autoConverted
 			return autoConverted[string]
 		number = +string
 		if _.isNaN(number) or number.toString() isnt string
@@ -539,7 +542,7 @@ query = (list, query, options = {}) ->
 			if _.isArray value
 				'[' + _.map(value, queryToJS) + ']'
 			else
-				if jsOperatorMap.hasOwnProperty value.name
+				if value.name of jsOperatorMap
 					# item['foo.bar'] ==> item?.foo?.bar
 					path = value.args[0]
 					prm = value.args[1]
@@ -563,7 +566,7 @@ query = (list, query, options = {}) ->
 						condition = item + jsOperatorMap[value.name] + testValue
 					#"_.select(list,function(item){return #{condition}})"
 					"function(list){return _.select(list,function(item){return #{condition};});}"
-				else if operators.hasOwnProperty value.name
+				else if value.name of operators
 					#"operators.#{value.name}(" + ['list'].concat(_.map(value.args, queryToJS)).join(',') + ')'
 					"function(list){return operators['#{value.name}'](" + ['list'].concat(_.map(value.args, queryToJS)).join(',') + ');}'
 				else

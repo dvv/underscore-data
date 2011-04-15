@@ -192,6 +192,10 @@ var data = window.data = [{
     }
 	});
 
+	test("FAILING", function(){
+		deepEqual(_.rql('limit(,1,2,)').args[0].args, ['', 1, 2, '']);
+	});
+
 	test("toMongo()", function(){
 		//console.log(_.rql('a!=b').toMongo());
 		//deq(_.rql('a!=b'), {name: 'and', args: [{name: 'ne', args: ['a', 'b']}]});

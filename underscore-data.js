@@ -173,7 +173,7 @@
       }
       query = query.replace(/(\([\+\*\$\-:\w%\._,]+\)|[\+\*\$\-:\w%\._]*|)([<>!]?=(?:[\w]*=)?|>|<)(\([\+\*\$\-:\w%\._,]+\)|[\+\*\$\-:\w%\._]*|)/g, function(t, property, operator, value) {
         if (operator.length < 3) {
-          if (!operatorMap.hasOwnProperty(operator)) {
+          if (!(operator in operatorMap)) {
             throw new URIError('Illegal operator ' + operator);
           }
           operator = operatorMap[operator];
@@ -197,7 +197,7 @@
             if (!term.name) {
               term.name = op;
             } else if (term.name !== op) {
-              throw new Error('Can not mix conjunctions within a group, use parenthesis around each set of same conjuctions (& and |)');
+              throw new Error('Cannot mix conjunctions within a group, use parenthesis around each set of same conjuctions (& and |)');
             }
           }
         }
@@ -255,7 +255,7 @@
       throw Error('Not implemented');
     };
     Query.prototype.toMongo = function(options) {
-      var search, walk;
+      var result, search, walk;
       if (options == null) {
         options = {};
       }
@@ -382,10 +382,14 @@
         options.fields = options.select;
         delete options.select;
       }
-      return {
+      result = {
         meta: options,
         search: search
       };
+      if (this.error) {
+        result.error = this.error;
+      }
+      return result;
     };
     return Query;
   })();
@@ -478,7 +482,7 @@
   converters = {
     auto: function(string) {
       var number;
-      if (autoConverted.hasOwnProperty(string)) {
+      if (string in autoConverted) {
         return autoConverted[string];
       }
       number = +string;
@@ -798,7 +802,7 @@
         if (_.isArray(value)) {
           return '[' + _.map(value, queryToJS) + ']';
         } else {
-          if (jsOperatorMap.hasOwnProperty(value.name)) {
+          if (value.name in jsOperatorMap) {
             path = value.args[0];
             prm = value.args[1];
             item = 'item';
@@ -824,7 +828,7 @@
               condition = item + jsOperatorMap[value.name] + testValue;
             }
             return "function(list){return _.select(list,function(item){return " + condition + ";});}";
-          } else if (operators.hasOwnProperty(value.name)) {
+          } else if (value.name in operators) {
             return ("function(list){return operators['" + value.name + "'](") + ['list'].concat(_.map(value.args, queryToJS)).join(',') + ');}';
           } else {
             return "function(list){return _.select(list,function(item){return false;});}";
@@ -1104,7 +1108,7 @@
             delete instance[i];
             continue;
           }
-          if (options.coerce && propDef.type && instance.hasOwnProperty(i) && value !== void 0) {
+          if (options.coerce && propDef.type && i in instance && value !== void 0) {
             value = coerce(value, propDef.type);
             instance[i] = value;
           }
@@ -1117,7 +1121,7 @@
       }
       for (i in instance) {
         value = instance[i];
-        if (instance.hasOwnProperty(i) && !objTypeDef[i] && (additionalProp === false || options.removeAdditionalProps)) {
+        if (i in instance && !objTypeDef[i] && (additionalProp === false || options.removeAdditionalProps)) {
           if (options.removeAdditionalProps) {
             delete instance[i];
             continue;
@@ -1129,7 +1133,7 @@
           }
         }
         requires = (_ref3 = objTypeDef[i]) != null ? _ref3.requires : void 0;
-        if (requires && !instance.hasOwnProperty(requires)) {
+        if (requires && !requires in instance) {
           errors.push({
             property: path,
             message: 'requires'

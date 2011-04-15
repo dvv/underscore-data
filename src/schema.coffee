@@ -231,7 +231,7 @@ validate = (instance, schema, options = {}, callback) ->
 					delete instance[i]
 					continue
 				# coerce if coercion is enabled and value is not undefined
-				if options.coerce and propDef.type and instance.hasOwnProperty(i) and value isnt undefined
+				if options.coerce and propDef.type and i of instance and value isnt undefined
 					value = coerce value, propDef.type
 					instance[i] = value
 				# remove undefined properties if they are optional
@@ -242,14 +242,14 @@ validate = (instance, schema, options = {}, callback) ->
 				checkProp value, propDef, path, i
 
 		for i, value of instance
-			if instance.hasOwnProperty(i) and not objTypeDef[i] and (additionalProp is false or options.removeAdditionalProps)
+			if i of instance and not objTypeDef[i] and (additionalProp is false or options.removeAdditionalProps)
 				if options.removeAdditionalProps
 					delete instance[i]
 					continue
 				else
 					errors.push property: path, message: 'unspecifed'
 			requires = objTypeDef[i]?.requires
-			if requires and not instance.hasOwnProperty requires
+			if requires and not requires of instance
 				errors.push property: path, message: 'requires'
 			# N.B. additional properties are validated only if schema is specified in additionalProperties
 			# otherwise they just go intact
