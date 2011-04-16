@@ -90,7 +90,11 @@ class Query
 				throw new URIError 'Closing parenthesis without an opening parenthesis' unless term
 				if isArray
 					term.args.push term.args.pop().args
-			else if propertyOrValue or delim is ','
+			else if delim is ','
+				if term.args.length is 0 # and not propertyOrValue
+					term.args.push ''
+				term.args.push stringToValue propertyOrValue, parameters
+			else if propertyOrValue
 				term.args.push stringToValue propertyOrValue, parameters
 			''
 		throw new URIError 'Opening parenthesis without a closing parenthesis' if term.parent

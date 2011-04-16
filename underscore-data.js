@@ -216,7 +216,12 @@
           if (isArray) {
             term.args.push(term.args.pop().args);
           }
-        } else if (propertyOrValue || delim === ',') {
+        } else if (delim === ',') {
+          if (term.args.length === 0) {
+            term.args.push('');
+          }
+          term.args.push(stringToValue(propertyOrValue, parameters));
+        } else if (propertyOrValue) {
           term.args.push(stringToValue(propertyOrValue, parameters));
         }
         return '';

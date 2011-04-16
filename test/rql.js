@@ -192,8 +192,9 @@ var data = window.data = [{
     }
 	});
 
-	test("FAILING", function(){
+	test("missing args", function(){
 		deepEqual(_.rql('limit(,1,2,)').args[0].args, ['', 1, 2, '']);
+		deepEqual(_.rql('limit(,,1,,2,)').args[0].args, ['', '', 1, '', 2, '']);
 	});
 
 	test("toMongo()", function(){
