@@ -1,6 +1,6 @@
 all: underscore-data.js test
 
-underscore-data.js: src/object.coffee src/rql.coffee src/schema.coffee
+underscore-data.js: src/index.coffee src/object.coffee src/rql.coffee src/schema.coffee
 	@coffee -jcp $^ >$@
 
 tmp/paperboy.js:

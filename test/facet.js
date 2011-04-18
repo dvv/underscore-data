@@ -4,12 +4,12 @@ $(document).ready(function(){
 
 	test('drill-down', function(){
 		var obj = {a:{b:{c:{d:[1,2,3]}}}};
-		deepEqual(_.get(obj, ['a','b','c','d',0]), 1, 'get deep property');
-		deepEqual(_.get(obj), obj, 'get deep property');
-		deepEqual(_.get(obj, [undefined, undefined, undefined]), undefined, 'get deep property');
-		deepEqual(_.get(obj, ['a', 'non', 'existing']), undefined, 'get deep property');
-		deepEqual(_.get(_.clone(obj), ['a','b','c','d',1], true), {a:{b:{c:{d:[1,undefined,3]}}}}, 'remove deep property');
-		deepEqual(_.get(_.clone(obj), ['a','non','existing','d',1], true), obj, 'remove deep property');
+		deepEqual(_.drill(obj, ['a','b','c','d',0]), 1, 'get deep property');
+		deepEqual(_.drill(obj), obj, 'get deep property');
+		deepEqual(_.drill(obj, [undefined, undefined, undefined]), undefined, 'get deep property');
+		deepEqual(_.drill(obj, ['a', 'non', 'existing']), undefined, 'get deep property');
+		deepEqual(_.drill(_.clone(obj), ['a','b','c','d',1], true), {a:{b:{c:{d:[1,undefined,3]}}}}, 'remove deep property');
+		deepEqual(_.drill(_.clone(obj), ['a','non','existing','d',1], true), obj, 'remove deep property');
 	});
 
 	test('toHash', function(){

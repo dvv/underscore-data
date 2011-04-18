@@ -34,7 +34,7 @@ _.mixin
 	toHash: (list, field) ->
 		r = {}
 		_.each list, (x) ->
-			f = _.get x, field
+			f = _.drill x, field
 			r[f] = x
 		r
 
@@ -61,7 +61,7 @@ _.mixin
 			if _.isArray definition
 				name = definition[1]
 				prop = definition[0]
-				prop = _.get obj, prop unless _.isFunction prop
+				prop = _.drill obj, prop unless _.isFunction prop
 			else
 				name = definition
 				prop = obj[name]
@@ -73,11 +73,11 @@ _.mixin
 	# drill down along object properties specified by path
 	# removes the said property and return mangled object if `remove` is truthy
 	#
-	# _.get({a:{b:{c:[0,2,4]}}},['a','b','c',2]) ---> 4
-	# TODO: _.get({a:{b:{$ref:function(attr){return{c:[0,2,4]}[attr];}}}},['a','b','c',2]) ---> 4
-	# TODO: _.get({a:{b:{$ref:function(err, result){return next(err, {c:[0,2,4]}[attr]);}}}},['a','b','c',2], next)
+	# _.drill({a:{b:{c:[0,2,4]}}},['a','b','c',2]) ---> 4
+	# TODO: _.drill({a:{b:{$ref:function(attr){return{c:[0,2,4]}[attr];}}}},['a','b','c',2]) ---> 4
+	# TODO: _.drill({a:{b:{$ref:function(err, result){return next(err, {c:[0,2,4]}[attr]);}}}},['a','b','c',2], next)
 	#
-	get: (obj, path, remove) ->
+	drill: (obj, path, remove) ->
 		# path as array specifies drilldown steps
 		if _.isArray path
 			if remove
@@ -90,7 +90,7 @@ _.mixin
 				orig
 			else
 				for part in path
-					# FIXME: ?should delegate to _.get obj, part
+					# FIXME: ?should delegate to _.drill obj, part
 					obj = obj and obj[part]
 				obj
 		# no path means no drill
@@ -106,6 +106,7 @@ _.mixin
 				obj[path]
 
 _.mixin
+
 	#
 	# until every engine supports ECMA5, safe coercing to Date is evil
 	#

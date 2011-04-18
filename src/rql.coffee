@@ -91,7 +91,7 @@ class Query
 				if isArray
 					term.args.push term.args.pop().args
 			else if delim is ','
-				if term.args.length is 0 # and not propertyOrValue
+				if term.args.length is 0
 					term.args.push ''
 				term.args.push stringToValue propertyOrValue, parameters
 			else if propertyOrValue
@@ -108,7 +108,6 @@ class Query
 			obj
 
 		removeParentProperty topTerm
-		topTerm
 
 	toString: () ->
 		if @name is 'and' then _.map(@args, queryToString).join('&') else queryToString @
@@ -445,7 +444,7 @@ operators =
 			else
 				selected = {}
 				for x in include
-					value = _.get item, x
+					value = _.drill item, x
 					#console.log 'DRILLING', x, value
 					continue if value is undefined
 					if _.isArray x
@@ -462,7 +461,7 @@ operators =
 			# handle exclusion
 			for x in exclude
 				#console.log '-DRILLING', x
-				_.get selected, x, true
+				_.drill selected, x, true
 			selected
 
 	values: () ->
@@ -487,39 +486,39 @@ operators =
 		list.sort (a, b) ->
 			for prop in order
 				#console.log 'COMPARE?', a, b, prop
-				va = _.get a, prop.attr
-				vb = _.get b, prop.attr
+				va = _.drill a, prop.attr
+				vb = _.drill b, prop.attr
 				#console.log 'COMPARE!', va, vb, prop
 				return if va > vb then prop.order else -prop.order if va isnt vb
 			0
 
 	match: (list, prop, regex) ->
 		regex = new RegExp regex, 'i' unless _.isRegExp regex
-		_.select list, (x) -> regex.test _.get x, prop
+		_.select list, (x) -> regex.test _.drill x, prop
 
 	nmatch: (list, prop, regex) ->
 		regex = new RegExp regex, 'i' unless _.isRegExp regex
-		_.select list, (x) -> not regex.test _.get x, prop
+		_.select list, (x) -> not regex.test _.drill x, prop
 
 	in: (list, prop, values) ->
 		values = _.ensureArray values
-		_.select list, (x) -> _.include values, _.get x, prop
+		_.select list, (x) -> _.include values, _.drill x, prop
 
 	nin: (list, prop, values) ->
 		values = _.ensureArray values
-		_.select list, (x) -> not _.include values, _.get x, prop
+		_.select list, (x) -> not _.include values, _.drill x, prop
 
 	contains: (list, prop, value) ->
-		_.select list, (x) -> _.include _.get(x, prop), value
+		_.select list, (x) -> _.include _.drill(x, prop), value
 
 	ncontains: (list, prop, value) ->
-		_.select list, (x) -> not _.include _.get(x, prop), value
+		_.select list, (x) -> not _.include _.drill(x, prop), value
 
 	between: (list, prop, minInclusive, maxExclusive) ->
-		_.select list, (x) -> minInclusive <= _.get(x, prop) < maxExclusive
+		_.select list, (x) -> minInclusive <= _.drill(x, prop) < maxExclusive
 
 	nbetween: (list, prop, minInclusive, maxExclusive) ->
-		_.select list, (x) -> not (minInclusive <= _.get(x, prop) < maxExclusive)
+		_.select list, (x) -> not (minInclusive <= _.drill(x, prop) < maxExclusive)
 
 operators.select = operators.pick
 operators.out = operators.nin

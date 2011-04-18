@@ -39,7 +39,7 @@
 #
 coerce = (value, type) ->
 	if type is 'string'
-		value = if value then ''+value else ''
+		value = if value? then String(value) else ''
 	else if type in ['number', 'integer']
 		unless _.isNaN value
 			value = Number value

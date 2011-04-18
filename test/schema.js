@@ -7,6 +7,34 @@ $(document).ready(function(){
 	(function(){
 	var obj;
 
+	module('Validate: coerce');
+
+	test('falsy', function(){
+		equals(_.coerce(undefined, 'string'), '');
+		equals(_.coerce(null, 'string'), '');
+		equals(_.coerce(0, 'string'), '0');
+		equals(_.coerce(false, 'string'), 'false');
+		equals(_.coerce(NaN, 'string'), 'NaN');
+	});
+
+	test('truthy', function(){
+		equals(_.coerce(1, 'string'), '1');
+		equals(_.coerce(1.0, 'string'), '1');
+		equals(_.coerce(1.1, 'string'), '1.1');
+		equals(_.coerce(true, 'string'), 'true');
+		equals(_.coerce([], 'string'), '');
+		equals(_.coerce({}, 'string'), '[object Object]');
+	});
+
+	})();
+
+	//
+	////////////////////////////////////////////////////////////////////
+	//
+
+	(function(){
+	var obj;
+
 	module('Validate: schema');
 
 	test('value attribute', function(){

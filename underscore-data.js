@@ -1,12 +1,17 @@
 (function() {
+  var Query, autoConverted, coerce, converters, encodeString, encodeValue, jsOperatorMap, operatorMap, operators, parse, plusMinus, query, queryToString, requires_array, stringToValue, stringify, valid_funcs, valid_operators, validate;
+  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty;
+  if (this._ === void 0 && this.$ !== void 0 && $.ender) {
+    this._ = $;
+    this._.mixin = this.$.ender;
+  }
   'use strict';
   /*
    *
    * Copyright(c) 2011 Vladimir Dronnikov <dronnikov@gmail.com>
    * MIT Licensed
    *
-  */  var Query, autoConverted, coerce, converters, encodeString, encodeValue, jsOperatorMap, operatorMap, operators, parse, plusMinus, query, queryToString, requires_array, stringToValue, stringify, valid_funcs, valid_operators, validate;
-  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty;
+  */
   _.mixin({
     isObject: function(value) {
       return value && typeof value === 'object';
@@ -29,7 +34,7 @@
       r = {};
       _.each(list, function(x) {
         var f;
-        f = _.get(x, field);
+        f = _.drill(x, field);
         return r[f] = x;
       });
       return r;
@@ -52,7 +57,7 @@
           name = definition[1];
           prop = definition[0];
           if (!_.isFunction(prop)) {
-            prop = _.get(obj, prop);
+            prop = _.drill(obj, prop);
           }
         } else {
           name = definition;
@@ -64,7 +69,7 @@
       });
       return Object.freeze(facet);
     },
-    get: function(obj, path, remove) {
+    drill: function(obj, path, remove) {
       var index, name, orig, part, _i, _j, _len, _len2, _ref;
       if (_.isArray(path)) {
         if (remove) {
@@ -240,7 +245,6 @@
         return obj;
       };
       removeParentProperty(topTerm);
-      topTerm;
     }
     Query.prototype.toString = function() {
       if (this.name === 'and') {
@@ -663,7 +667,7 @@
           selected = {};
           for (_i = 0, _len = include.length; _i < _len; _i++) {
             x = include[_i];
-            value = _.get(item, x);
+            value = _.drill(item, x);
             if (value === void 0) {
               continue;
             }
@@ -684,7 +688,7 @@
         }
         for (_k = 0, _len3 = exclude.length; _k < _len3; _k++) {
           x = exclude[_k];
-          _.get(selected, x, true);
+          _.drill(selected, x, true);
         }
         return selected;
       });
@@ -721,8 +725,8 @@
         var prop, va, vb, _i, _len;
         for (_i = 0, _len = order.length; _i < _len; _i++) {
           prop = order[_i];
-          va = _.get(a, prop.attr);
-          vb = _.get(b, prop.attr);
+          va = _.drill(a, prop.attr);
+          vb = _.drill(b, prop.attr);
           if (va > vb) {
             return prop.order;
           } else {
@@ -739,7 +743,7 @@
         regex = new RegExp(regex, 'i');
       }
       return _.select(list, function(x) {
-        return regex.test(_.get(x, prop));
+        return regex.test(_.drill(x, prop));
       });
     },
     nmatch: function(list, prop, regex) {
@@ -747,41 +751,41 @@
         regex = new RegExp(regex, 'i');
       }
       return _.select(list, function(x) {
-        return !regex.test(_.get(x, prop));
+        return !regex.test(_.drill(x, prop));
       });
     },
     "in": function(list, prop, values) {
       values = _.ensureArray(values);
       return _.select(list, function(x) {
-        return _.include(values, _.get(x, prop));
+        return _.include(values, _.drill(x, prop));
       });
     },
     nin: function(list, prop, values) {
       values = _.ensureArray(values);
       return _.select(list, function(x) {
-        return !_.include(values, _.get(x, prop));
+        return !_.include(values, _.drill(x, prop));
       });
     },
     contains: function(list, prop, value) {
       return _.select(list, function(x) {
-        return _.include(_.get(x, prop), value);
+        return _.include(_.drill(x, prop), value);
       });
     },
     ncontains: function(list, prop, value) {
       return _.select(list, function(x) {
-        return !_.include(_.get(x, prop), value);
+        return !_.include(_.drill(x, prop), value);
       });
     },
     between: function(list, prop, minInclusive, maxExclusive) {
       return _.select(list, function(x) {
         var _ref;
-        return (minInclusive <= (_ref = _.get(x, prop)) && _ref < maxExclusive);
+        return (minInclusive <= (_ref = _.drill(x, prop)) && _ref < maxExclusive);
       });
     },
     nbetween: function(list, prop, minInclusive, maxExclusive) {
       return _.select(list, function(x) {
         var _ref;
-        return !((minInclusive <= (_ref = _.get(x, prop)) && _ref < maxExclusive));
+        return !((minInclusive <= (_ref = _.drill(x, prop)) && _ref < maxExclusive));
       });
     }
   };
@@ -883,7 +887,7 @@
   coerce = function(value, type) {
     var date;
     if (type === 'string') {
-      value = value ? '' + value : '';
+      value = value != null ? String(value) : '';
     } else if (type === 'number' || type === 'integer') {
       if (!_.isNaN(value)) {
         value = Number(value);
