@@ -204,6 +204,12 @@ class Query
 						#console.log 'CUSTOM', func, valid_funcs, args
 						# N.B. here we encountered a custom function
 						return
+					# ids must be converted to ObjectIDs
+					if Query.convertId and key is '_id'
+						if _.isArray args
+							args = args.map (x) -> Query.convertId x
+						else
+							args = Query.convertId args
 					# $or requires an array of conditions
 					#console.log 'COND', search, name, key, func, args
 					if name is 'or'
