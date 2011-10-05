@@ -8,5 +8,5 @@
   "dependencies"  : {"underscore": ""},
   "lib"           : ".",
   "main"          : "underscore-data.js",
-  "version"       : "0.0.5"
+  "version"       : "0.0.6"
 }
