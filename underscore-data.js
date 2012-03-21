@@ -618,7 +618,7 @@
       return r;
     },
     freeze: function(obj) {
-      if (_.isObject(obj)) {
+      if (_.isObject(obj) || _.isArray(obj)) {
         Object.freeze(obj);
         _.each(obj, function(v, k) {
           return _.freeze(v);

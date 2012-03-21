@@ -33,6 +33,7 @@
  */
 
 var Fs = require('fs');
+var parseUrl = require('url').parse;
 
 var pwd = process.cwd();
 var ENOENT = require('constants').ENOENT;
@@ -45,8 +46,9 @@ function mime(url) {
 }
 
 require('http').createServer(function(req, res) {
-	if (req.url === '/') req.url = '/index.html';
-	Fs.readFile(pwd + req.url, function(err, data) {
+	req.uri = parseUrl(req.url);
+	if (req.uri.pathname === '/') req.uri.pathname = '/index.html';
+	Fs.readFile(pwd + req.uri.pathname, function(err, data) {
 		if (err) {
 			if (err.errno === ENOENT) {
 				res.writeHead(404);
@@ -57,7 +59,7 @@ require('http').createServer(function(req, res) {
 			}
 		} else {
 			res.writeHead(200, {
-				'Content-Type': mime(req.url),
+				'Content-Type': mime(req.uri.pathname),
 				'Content-Length': data.length
 			});
 			res.end(data);

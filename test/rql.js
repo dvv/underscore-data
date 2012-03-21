@@ -44,6 +44,7 @@ var queryPairs = {
     "arrays": [
         {"a": {name:"and", args:["a"]}},
         {"(a)": {name:"and", args:[["a"]]}},
+        {"(a=10)": {name:"and", args:[["a","10"]]}},
         {"a,b,c": {name:"and", args:["a", "b", "c"]}},
         {"(a,b,c)": {name:"and", args:[["a", "b", "c"]]}},
         {"a(b)": {name:"and","args":[{"name":"a","args":["b"]}]}},
