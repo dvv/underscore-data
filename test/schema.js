@@ -10,20 +10,20 @@ $(document).ready(function(){
 	module('Validate: coerce');
 
 	test('falsy', function(){
-		equals(_.coerce(undefined, 'string'), '');
-		equals(_.coerce(null, 'string'), '');
-		equals(_.coerce(0, 'string'), '0');
-		equals(_.coerce(false, 'string'), 'false');
-		equals(_.coerce(NaN, 'string'), 'NaN');
+		equal(_.coerce(undefined, 'string'), '');
+		equal(_.coerce(null, 'string'), '');
+		equal(_.coerce(0, 'string'), '0');
+		equal(_.coerce(false, 'string'), 'false');
+		equal(_.coerce(NaN, 'string'), 'NaN');
 	});
 
 	test('truthy', function(){
-		equals(_.coerce(1, 'string'), '1');
-		equals(_.coerce(1.0, 'string'), '1');
-		equals(_.coerce(1.1, 'string'), '1.1');
-		equals(_.coerce(true, 'string'), 'true');
-		equals(_.coerce([], 'string'), '');
-		equals(_.coerce({}, 'string'), '[object Object]');
+		equal(_.coerce(1, 'string'), '1');
+		equal(_.coerce(1.0, 'string'), '1');
+		equal(_.coerce(1.1, 'string'), '1.1');
+		equal(_.coerce(true, 'string'), 'true');
+		equal(_.coerce([], 'string'), '');
+		equal(_.coerce({}, 'string'), '[object Object]');
 	});
 
 	})();
@@ -39,7 +39,7 @@ $(document).ready(function(){
 
 	test('value attribute', function(){
 		obj = {id: 'bac', foo: '4'};
-		equals(_.validate(obj, {
+		equal(_.validate(obj, {
 			type: 'object',
 			properties: {
 				foo: {
@@ -54,7 +54,7 @@ $(document).ready(function(){
 
 	test('empty properties', function(){
 		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
-		equals(_.validate(obj, {
+		equal(_.validate(obj, {
 			type: 'object',
 			properties: {
 			},
@@ -66,7 +66,7 @@ $(document).ready(function(){
 
 	test('undefined properties', function(){
 		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
-		equals(_.validate(obj, {
+		equal(_.validate(obj, {
 			type: 'object',
 			additionalProperties: true
 		}, {veto: true, removeAdditionalProps: false, flavor: 'add', coerce: true}),
@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 	test('undefined properties and additionalProperties=false', function(){
 		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
-		equals(_.validate(obj, {
+		equal(_.validate(obj, {
 			type: 'object',
 			additionalProperties: false
 		}, {veto: true, removeAdditionalProps: true, flavor: 'add', coerce: true}),
@@ -86,7 +86,7 @@ $(document).ready(function(){
 
 	test('greedy coercion for optionals', function(){
 		obj = {foo: undefined, bar: null};
-		equals(_.validate(obj, {
+		equal(_.validate(obj, {
 			type: 'object',
 			properties: {
 				foo: {
@@ -105,7 +105,7 @@ $(document).ready(function(){
 
 	test('fixed values', function(){
 		obj = {foo: 'baz'};
-		equals(_.validate(obj, {
+		equal(_.validate(obj, {
 			type: 'object',
 			properties: {
 				foo: {
@@ -122,7 +122,7 @@ $(document).ready(function(){
 		deepEqual(obj, {foo: 'bar'}, 'schema ok');
 		//
 		obj = {};
-		equals(_.validate(obj, {
+		equal(_.validate(obj, {
 			type: 'object',
 			properties: {
 				foo: {
@@ -186,7 +186,7 @@ $(document).ready(function(){
 
 	test('add', function(){
 		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
-		equals(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
+		equal(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
 			null, 'coerced and added ok');
 		//console.log(obj.defaulty, _.parseDate('2011-02-14'));
 		deepEqual(obj, {id: 'bac', foo: 4, bar: ['vareniki'], defaulty: _.parseDate('2011-02-14')}, 'coerced for "add" ok');
@@ -272,7 +272,7 @@ $(document).ready(function(){
 
 	test('add', function(){
 		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
-		equals(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
+		equal(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
 			null, 'coerced and added ok');
 		deepEqual(obj, {id: 'bac', foo: 4, bar: ['vareniki'], defaulty: _.parseDate('2011-02-14'), spam: true}, 'coerced for "add" ok');
 		obj = {id: 'bac1', foo: 'a', bar: 'pelmeshki'};
@@ -356,7 +356,7 @@ $(document).ready(function(){
 
 	test('add', function(){
 		obj = {id: 'bac', foo: '4', bar: 'vareniki', spam: true};
-		equals(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
+		equal(_.validate(obj, schema, {veto: true, removeAdditionalProps: !schema.additionalProperties, flavor: 'add', coerce: true}),
 			null, 'coerced and added ok');
 		deepEqual(obj, {id: 'bac', foo: 4, bar: ['vareniki'], defaulty: _.parseDate('2011-12-31'), spam: 1}, 'coerced for "add" ok');
 		obj = {id: 'bac1', foo: 'a', bar: 'pelmeshki'};

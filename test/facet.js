@@ -24,7 +24,7 @@ $(document).ready(function(){
 		deepEqual(_.proxy(obj, ['action']), {action: obj.action}, 'simple');
 		deepEqual(_.proxy(obj, [['deep', 'action']]), {action: obj.deep}, 'named');
 		deepEqual(_.proxy(obj, [[['deep', 'action'], 'action']]), {action: obj.deep.action}, 'deep and named');
-		equals(_.proxy(obj, [[['deep', 'action'], 'action']]).action(), 'acted from deep', 'deep and named');
+		equal(_.proxy(obj, [[['deep', 'action'], 'action']]).action(), 'acted from deep', 'deep and named');
 		deepEqual(_.proxy(obj, [[console.log, 'log']]), {log: console.log}, 'renamed foreign method');
 	});
 

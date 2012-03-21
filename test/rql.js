@@ -2,11 +2,11 @@ function testSchema(data){
 	data = data.postalcodes;
 	//console.log('TEST', data);
 	test("real data -- geonames of postal code 17000", function(){
-		equals(_.query(data, 'countryCode=CZ').length, 4);
-		equals(_.query(data, _.rql().eq('placeName','Holešovice (část)')).length, 1);
+		equal(_.query(data, 'countryCode=CZ').length, 4);
+		equal(_.query(data, _.rql().eq('placeName','Holešovice (část)')).length, 1);
 		deepEqual(_.query(data, _.rql('placeName=Hole%C5%A1ovice%20%28%C4%8D%C3%A1st%29,values(adminCode1)')), [["3100"]]);
 		//console.log(_.rql('placeName=string%3AHole%C5%A1ovice%2520%28%C4%8D%C3%A1st%29'));
-		equals(_.query(_.clone(data), 'countryCode=TR&sort(-placeName)').length, 13);
+		equal(_.query(_.clone(data), 'countryCode=TR&sort(-placeName)').length, 13);
 		deepEqual(_.query(_.clone(data), 'countryCode=TR&sort(-placeName)&limit(2,2)&pick(placeName)'),
 			[{placeName: 'Kizilcaören Köyü'},{placeName: 'Kemalköy Köyü'}]);
 	});
@@ -75,7 +75,7 @@ var queryPairs = {
         {"a=lt=b": "lt(a,b)"},
         {"a<b": "lt(a,b)"}
     ],
-    "less-than-equals": [
+    "less-than-equal": [
         {"le(a,b)": {name:"and", args:[{name:"le", args:["a","b"]}]}},
         {"a=le=b": "le(a,b)"},
         {"a<=b": "le(a,b)"}
@@ -85,7 +85,7 @@ var queryPairs = {
         {"a=gt=b": "gt(a,b)"},
         {"a>b": "gt(a,b)"}
     ],
-    "greater-than-equals": [
+    "greater-than-equal": [
         {"ge(a,b)": {name:"and", args:[{name:"ge", args:["a", "b"]}]}},
         {"a=ge=b": "ge(a,b)"},
         {"a>=b": "ge(a,b)"}
@@ -241,14 +241,14 @@ var data = window.data = [{
     //assert.deepEqual(parsed, {name: 'and', args: [{name: 'eq', args: ['id1', /^abc\//]}]});
     ok(_.rql().eq('_1',/GGG(EE|FF)/i)+'' === 'eq(_1,re:GGG%28EE%7CFF%29)');
     parsed = _.rql('eq(_1,re:GGG%28EE%7CFF%29)');
-    equals(parsed.args[0].args[1].toString(), /GGG(EE|FF)/i.toString());
+    equal(parsed.args[0].args[1].toString(), /GGG(EE|FF)/i.toString());
     //assert.ok(_.rql().eq('_1',/GGG(EE|FF)/)+'' === 'eq(_1,RE:GGG%28EE%7CFF%29)');
     // string to array and back
     var str = 'somefunc(and(1),(a,b),(10,(10,1)),(a,b.c))';
-    equals(_.rql(str)+'', str);
+    equal(_.rql(str)+'', str);
     // quirky arguments
     var name = ['a/b','c.d'];
-    equals(_.rql(_.rql().eq(name,1)+'')+'', 'eq((a%2Fb,c.d),1)');
+    equal(_.rql(_.rql().eq(name,1)+'')+'', 'eq((a%2Fb,c.d),1)');
     deepEqual(_.rql(_.rql().eq(name,1)+'').args[0].args[0], name);
     // utf-8
 		deepEqual(_.rql('placeName=a=Hole%C5%A1ovice%20%28%C4%8D%C3%A1st%29').args[0].args[1], 'Holešovice (část)', 'utf-8 conversion');
@@ -257,20 +257,20 @@ var data = window.data = [{
 	module("Array");
 
 	test("filtering #1", function(){
-		equals(_.query(data, "price<10").length, 1);
-		equals(_.query(data, "price<11").length, 2);
-		equals(_.query(data, "nested/property=value").length, 1);
-		equals(_.query(data, "with%2Fslash=slashed").length, 1);
-		equals(_.query(data, "out(price,(5,10))").length, 0);
-		equals(_.query(data, "out(price,(5))").length, 1);
-		equals(_.query(data, "contains(tags,even)").length, 1);
-		equals(_.query(data, "contains(tags,fun)").length, 2);
-		equals(_.query(data, "excludes(tags,fun)").length, 0);
+		equal(_.query(data, "price<10").length, 1);
+		equal(_.query(data, "price<11").length, 2);
+		equal(_.query(data, "nested/property=value").length, 1);
+		equal(_.query(data, "with%2Fslash=slashed").length, 1);
+		equal(_.query(data, "out(price,(5,10))").length, 0);
+		equal(_.query(data, "out(price,(5))").length, 1);
+		equal(_.query(data, "contains(tags,even)").length, 1);
+		equal(_.query(data, "contains(tags,fun)").length, 2);
+		equal(_.query(data, "excludes(tags,fun)").length, 0);
 
 		//console.log(_.query(data, "excludes(tags,ne(fun))"), _.query(null, "excludes(tags,ne(fun))"));
 		// FIXME: failing!
-		//equals(_.query(data, "excludes(tags,ne(fun))").length, 1);
-		//equals(_.query(data, "excludes(tags,ne(even))").length, 0);
+		//equal(_.query(data, "excludes(tags,ne(fun))").length, 1);
+		//equal(_.query(data, "excludes(tags,ne(even))").length, 0);
 
 		deepEqual(_.query(data, "match(price,10)"), [data[0]]);
 		deepEqual(_.query(data, "price=re:10"), [data[0]]);
