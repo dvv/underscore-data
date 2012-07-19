@@ -589,7 +589,7 @@ query = (list, query, options = {}) ->
 	#expr = ';(function(list){return ' + queryToJS(query) + '})(list);'
 	expr = queryToJS(query).slice(15, -1) # strip the outmost function(list) ...
 	#console.log expr #, list
-	if list then (new Function 'list, operators', expr) list, operators else expr
+	if list then (new Function 'list, operators, _', expr) list, operators, _ else expr
 
 #
 # expose

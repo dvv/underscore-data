@@ -1,606 +1,36 @@
 (function() {
-  if (this._ === void 0 && this.$ !== void 0 && $.ender) {
-    this._ = $;
-    this._.mixin = this.$.ender;
-  }
-}).call(this);
-(function() {
-  var __slice = Array.prototype.slice;
-  if (this._ === void 0 && this.$ !== void 0 && $.ender) {
-    this._ = $;
-    this._.mixin = this.$.ender;
-  }
-  'use strict';
-  /*
-   *
-   * Copyright(c) 2011 Vladimir Dronnikov <dronnikov@gmail.com>
-   * MIT Licensed
-   *
-  */
-  _.mixin({
-    isObject: function(value) {
-      return value && typeof value === 'object';
-    },
-    ensureArray: function(value) {
-      if (!value) {
-        if (value === void 0) {
-          return [];
-        } else {
-          return [value];
-        }
-      }
-      if (_.isString(value)) {
-        return [value];
-      }
-      return _.toArray(value);
-    },
-    toHash: function(list, field) {
-      var r;
-      r = {};
-      _.each(list, function(x) {
-        var f;
-        f = _.drill(x, field);
-        return r[f] = x;
-      });
-      return r;
-    },
-    freeze: function(obj) {
-      if (_.isObject(obj)) {
-        Object.freeze(obj);
-        _.each(obj, function(v, k) {
-          return _.freeze(v);
-        });
-      }
-      return obj;
-    },
-    proxy: function(obj, exposes) {
-      var facet;
-      facet = {};
-      _.each(exposes, function(definition) {
-        var name, prop;
-        if (_.isArray(definition)) {
-          name = definition[1];
-          prop = definition[0];
-          if (!_.isFunction(prop)) {
-            prop = _.drill(obj, prop);
-          }
-        } else {
-          name = definition;
-          prop = obj[name];
-        }
-        if (prop) {
-          return facet[name] = prop;
-        }
-      });
-      return Object.freeze(facet);
-    },
-    drill: function(obj, path, remove) {
-      var index, name, orig, part, _i, _j, _len, _len2, _ref;
-      if (_.isArray(path)) {
-        if (remove) {
-          _ref = path, path = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), name = _ref[_i++];
-          orig = obj;
-          for (index = 0, _len = path.length; index < _len; index++) {
-            part = path[index];
-            obj = obj && obj[part];
-          }
-          if (obj != null ? obj[name] : void 0) {
-            delete obj[name];
-          }
-          return orig;
-        } else {
-          for (_j = 0, _len2 = path.length; _j < _len2; _j++) {
-            part = path[_j];
-            obj = obj && obj[part];
-          }
-          return obj;
-        }
-      } else if (path === void 0) {
-        return obj;
-      } else {
-        if (remove) {
-          delete obj[path];
-          return obj;
-        } else {
-          return obj[path];
-        }
-      }
-    }
-  });
-  _.mixin({
-    parseDate: function(value) {
-      var date, parts;
-      date = new Date(value);
-      if (_.isDate(date)) {
-        return date;
-      }
-      parts = String(value).match(/(\d+)/g);
-      return new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1);
-    },
-    isDate: function(obj) {
-      return !!((obj != null ? obj.getTimezoneOffset : void 0) && obj.setUTCFullYear && !_.isNaN(obj.getTime()));
-    }
-  });
-}).call(this);
-(function() {
-  var coerce, validate;
-  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty;
-  if (this._ === void 0 && this.$ !== void 0 && $.ender) {
-    this._ = $;
-    this._.mixin = this.$.ender;
-  }
-  'use strict';
-  /*
-   *
-   * Copyright(c) 2011 Vladimir Dronnikov <dronnikov@gmail.com>
-   * MIT Licensed
-   *
-  */
-  _.mixin({
-    isObject: function(value) {
-      return value && typeof value === 'object';
-    },
-    ensureArray: function(value) {
-      if (!value) {
-        if (value === void 0) {
-          return [];
-        } else {
-          return [value];
-        }
-      }
-      if (_.isString(value)) {
-        return [value];
-      }
-      return _.toArray(value);
-    },
-    toHash: function(list, field) {
-      var r;
-      r = {};
-      _.each(list, function(x) {
-        var f;
-        f = _.drill(x, field);
-        return r[f] = x;
-      });
-      return r;
-    },
-    freeze: function(obj) {
-      if (_.isObject(obj)) {
-        Object.freeze(obj);
-        _.each(obj, function(v, k) {
-          return _.freeze(v);
-        });
-      }
-      return obj;
-    },
-    proxy: function(obj, exposes) {
-      var facet;
-      facet = {};
-      _.each(exposes, function(definition) {
-        var name, prop;
-        if (_.isArray(definition)) {
-          name = definition[1];
-          prop = definition[0];
-          if (!_.isFunction(prop)) {
-            prop = _.drill(obj, prop);
-          }
-        } else {
-          name = definition;
-          prop = obj[name];
-        }
-        if (prop) {
-          return facet[name] = prop;
-        }
-      });
-      return Object.freeze(facet);
-    },
-    drill: function(obj, path, remove) {
-      var index, name, orig, part, _i, _j, _len, _len2, _ref;
-      if (_.isArray(path)) {
-        if (remove) {
-          _ref = path, path = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), name = _ref[_i++];
-          orig = obj;
-          for (index = 0, _len = path.length; index < _len; index++) {
-            part = path[index];
-            obj = obj && obj[part];
-          }
-          if (obj != null ? obj[name] : void 0) {
-            delete obj[name];
-          }
-          return orig;
-        } else {
-          for (_j = 0, _len2 = path.length; _j < _len2; _j++) {
-            part = path[_j];
-            obj = obj && obj[part];
-          }
-          return obj;
-        }
-      } else if (path === void 0) {
-        return obj;
-      } else {
-        if (remove) {
-          delete obj[path];
-          return obj;
-        } else {
-          return obj[path];
-        }
-      }
-    }
-  });
-  _.mixin({
-    parseDate: function(value) {
-      var date, parts;
-      date = new Date(value);
-      if (_.isDate(date)) {
-        return date;
-      }
-      parts = String(value).match(/(\d+)/g);
-      return new Date(parts[0], (parts[1] || 1) - 1, parts[2] || 1);
-    },
-    isDate: function(obj) {
-      return !!((obj != null ? obj.getTimezoneOffset : void 0) && obj.setUTCFullYear && !_.isNaN(obj.getTime()));
-    }
-  });
-  'use strict';
-  /*
-  
-  	JSONSchema Validator - Validates JavaScript objects using JSON Schemas
-  	(http://www.json.com/json-schema-proposal/)
-  
-  	Copyright (c) 2007 Kris Zyp SitePen (www.sitepen.com)
-  	Copyright (c) 2011 Vladimir Dronnikov dronnikov@gmail.com
-  
-  	Licensed under the MIT (MIT-LICENSE.txt) license
-  
-  */
-  /*
-   *
-   * Copyright(c) 2011 Vladimir Dronnikov <dronnikov@gmail.com>
-   * MIT Licensed
-   *
-  */
-  /*
-  	Rewrite of kriszyp's json-schema validator https://github.com/kriszyp/json-schema
-  	Relies on documentcloud/underscore to normalize JS
-  */
-  coerce = function(value, type) {
-    var date;
-    if (type === 'string') {
-      value = value != null ? String(value) : '';
-    } else if (type === 'number' || type === 'integer') {
-      if (!_.isNaN(value)) {
-        value = Number(value);
-        if (type === 'integer') {
-          value = Math.floor(value);
-        }
-      }
-    } else if (type === 'boolean') {
-      value = value === 'false' ? false : !!value;
-    } else if (type === 'null') {
-      value = null;
-    } else if (type === 'object') {
-      if (typeof JSON !== "undefined" && JSON !== null ? JSON.parse : void 0) {
-        try {
-          value = JSON.parse(value);
-        } catch (err) {
+  var Query, autoConverted, coerce, converters, encodeString, encodeValue, jsOperatorMap, operatorMap, operators, parse, plusMinus, query, queryToString, requires_array, stringToValue, stringify, valid_funcs, valid_operators, validate, _,
+    __slice = [].slice,
+    __hasProp = {}.hasOwnProperty;
 
-        }
-      }
-    } else if (type === 'array') {
-      value = _.ensureArray(value);
-    } else if (type === 'date') {
-      date = _.parseDate(value);
-      if (_.isDate(date)) {
-        value = date;
-      }
-    }
-    return value;
-  };
-  validate = function(instance, schema, options, callback) {
-    var async, asyncs, checkObj, checkProp, errors, i, len, self, _changing, _fn, _len;
-    if (options == null) {
-      options = {};
-    }
-    self = this;
-    _changing = options.changing;
-    asyncs = [];
-    errors = [];
-    checkProp = function(value, schema, path, i) {
-      var addError, checkType, enumeration, itemsIsArray, propDef, v, _len;
-      if (path) {
-        if (_.isNumber(i)) {
-          path += '[' + i + ']';
-        } else if (i === void 0) {
-          path += '';
-        } else {
-          path += '.' + i;
-        }
-      } else {
-        path += i;
-      }
-      addError = function(message) {
-        return errors.push({
-          property: path,
-          message: message
-        });
-      };
-      if ((typeof schema !== 'object' || _.isArray(schema)) && (path || typeof schema !== 'function') && !(schema != null ? schema.type : void 0)) {
-        if (_.isFunction(schema)) {
-          if (!(value instanceof schema)) {
-            addError('type');
-          }
-        } else if (schema) {
-          addError('invalid');
-        }
-        return null;
-      }
-      if (_changing && schema.readonly) {
-        addError('readonly');
-      }
-      if (schema["extends"]) {
-        checkProp(value, schema["extends"], path, i);
-      }
-      checkType = function(type, value) {
-        var priorErrors, t, theseErrors, unionErrors, _i, _len;
-        if (type) {
-          if (typeof type === 'string' && type !== 'any' && (type == 'null' ? value !== null : typeof value !== type) &&
-						!(type === 'array' && _.isArray(value)) &&
-						!(type === 'date' && _.isDate(value)) &&
-						!(type === 'integer' && value%1===0)) {
-            return [
-              {
-                property: path,
-                message: 'type'
-              }
-            ];
-          }
-          if (_.isArray(type)) {
-            unionErrors = [];
-            for (_i = 0, _len = type.length; _i < _len; _i++) {
-              t = type[_i];
-              unionErrors = checkType(t, value);
-              if (!unionErrors.length) {
-                break;
-              }
-            }
-            if (unionErrors.length) {
-              return unionErrors;
-            }
-          } else if (typeof type === 'object') {
-            priorErrors = errors;
-            errors = [];
-            checkProp(value, type, path);
-            theseErrors = errors;
-            errors = priorErrors;
-            return theseErrors;
-          }
-        }
-        return [];
-      };
-      if (value === void 0) {
-        if ((!schema.optional || typeof schema.optional === 'object' && !schema.optional[options.flavor]) && !schema.get && !(schema["default"] != null)) {
-          addError('required');
-        }
-      } else {
-        errors = errors.concat(checkType(schema.type, value));
-        if (schema.disallow && !checkType(schema.disallow, value).length) {
-          addError('disallowed');
-        }
-        if (value !== null) {
-          if (_.isArray(value)) {
-            if (schema.items) {
-              itemsIsArray = _.isArray(schema.items);
-              propDef = schema.items;
-              for (i = 0, _len = value.length; i < _len; i++) {
-                v = value[i];
-                if (itemsIsArray) {
-                  propDef = schema.items[i];
-                }
-                if (options.coerce && propDef.type) {
-                  value[i] = coerce(v, propDef.type);
-                }
-                errors.concat(checkProp(v, propDef, path, i));
-              }
-            }
-            if (schema.minItems && value.length < schema.minItems) {
-              addError('minItems');
-            }
-            if (schema.maxItems && value.length > schema.maxItems) {
-              addError('maxItems');
-            }
-          } else if (schema.properties || schema.additionalProperties) {
-            errors.concat(checkObj(value, schema.properties, path, schema.additionalProperties));
-          }
-          if (_.isString(value)) {
-            if (schema.pattern && !value.match(schema.pattern)) {
-              addError('pattern');
-            }
-            if (schema.maxLength && value.length > schema.maxLength) {
-              addError('maxLength');
-            }
-            if (schema.minLength && value.length < schema.minLength) {
-              addError('minLength');
-            }
-          }
-          if (schema.minimum !== void 0 && typeof value === typeof schema.minimum && schema.minimum > value) {
-            addError('minimum');
-          }
-          if (schema.maximum !== void 0 && typeof value === typeof schema.maximum && schema.maximum < value) {
-            addError('maximum');
-          }
-          if (schema["enum"]) {
-            enumeration = schema["enum"];
-            if (_.isFunction(enumeration)) {
-              if (enumeration.length === 2) {
-                asyncs.push({
-                  value: value,
-                  path: path,
-                  fetch: enumeration
-                });
-              } else if (enumeration.length === 1) {
-                if (!enumeration.call(self, value)) {
-                  addError('enum');
-                }
-              } else {
-                enumeration = enumeration.call(self);
-                if (!_.include(enumeration, value)) {
-                  addError('enum');
-                }
-              }
-            } else {
-              if (!_.include(enumeration, value)) {
-                addError('enum');
-              }
-            }
-          }
-          if (_.isNumber(schema.maxDecimal) && (new RegExp("\\.[0-9]{" + (schema.maxDecimal + 1) + ",}")).test(value)) {
-            addError('digits');
-          }
-        }
-      }
-      return null;
-    };
-    checkObj = function(instance, objTypeDef, path, additionalProp) {
-      var i, propDef, requires, value, _ref, _ref2, _ref3;
-      if (objTypeDef == null) {
-        objTypeDef = {};
-      }
-      if (_.isObject(objTypeDef)) {
-        if (typeof instance !== 'object' || _.isArray(instance)) {
-          errors.push({
-            property: path,
-            message: 'type'
-          });
-        }
-        for (i in objTypeDef) {
-          if (!__hasProp.call(objTypeDef, i)) continue;
-          propDef = objTypeDef[i];
-          value = instance[i];
-          if ('value' in propDef && ((_ref = options.flavor) === 'add' || _ref === 'update')) {
-            value = instance[i] = propDef.value;
-          }
-          if (value === void 0 && options.existingOnly) {
-            continue;
-          }
-          if (options.veto && (propDef.veto === true || typeof propDef.veto === 'object' && propDef.veto[options.flavor])) {
-            delete instance[i];
-            continue;
-          }
-          if (((_ref2 = options.flavor) === 'query' || _ref2 === 'get') && !options.coerce) {
-            continue;
-          }
-          if (value === void 0 && (propDef["default"] != null) && options.flavor === 'add') {
-            value = instance[i] = propDef["default"];
-          }
-          if (value === void 0 && options.flavor !== 'add') {
-            delete instance[i];
-            continue;
-          }
-          if (options.coerce && propDef.type && i in instance && value !== void 0) {
-            value = coerce(value, propDef.type);
-            instance[i] = value;
-          }
-          if (value === void 0 && propDef.optional) {
-            delete instance[i];
-            continue;
-          }
-          checkProp(value, propDef, path, i);
-        }
-      }
-      for (i in instance) {
-        value = instance[i];
-        if (i in instance && !objTypeDef[i] && (additionalProp === false || options.removeAdditionalProps)) {
-          if (options.removeAdditionalProps) {
-            delete instance[i];
-            continue;
-          } else {
-            errors.push({
-              property: path,
-              message: 'unspecifed'
-            });
-          }
-        }
-        requires = (_ref3 = objTypeDef[i]) != null ? _ref3.requires : void 0;
-        if (requires && !requires in instance) {
-          errors.push({
-            property: path,
-            message: 'requires'
-          });
-        }
-        if ((additionalProp != null ? additionalProp.type : void 0) && !objTypeDef[i]) {
-          if (options.coerce && additionalProp.type) {
-            value = coerce(value, additionalProp.type);
-            instance[i] = value;
-            checkProp(value, additionalProp, path, i);
-          }
-        }
-        if (!_changing && (value != null ? value.$schema : void 0)) {
-          errors = errors.concat(checkProp(value, value.$schema, path, i));
-        }
-      }
-      return errors;
-    };
-    if (schema) {
-      checkProp(instance, schema, '', _changing || '');
-    }
-    if (!_changing && (instance != null ? instance.$schema : void 0)) {
-      checkProp(instance, instance.$schema, '', '');
-    }
-    len = asyncs.length;
-    if (callback && len) {
-      _fn = function(async) {
-        return async.fetch.call(self, async.value, function(err) {
-          if (err) {
-            errors.push({
-              property: async.path,
-              message: 'enum'
-            });
-          }
-          len -= 1;
-          if (!len) {
-            return callback(errors.length && errors || null, instance);
-          }
-        });
-      };
-      for (i = 0, _len = asyncs.length; i < _len; i++) {
-        async = asyncs[i];
-        _fn(async);
-      }
-    } else if (callback) {
-      callback(errors.length && errors || null, instance);
-    } else {
-      return errors.length && errors || null;
-    }
-  };
-  _.mixin({
-    coerce: coerce,
-    validate: validate
-  });
-}).call(this);
-(function() {
-  var Query, autoConverted, coerce, converters, encodeString, encodeValue, jsOperatorMap, operatorMap, operators, parse, plusMinus, query, queryToString, requires_array, stringToValue, stringify, valid_funcs, valid_operators, validate;
-  var __slice = Array.prototype.slice, __hasProp = Object.prototype.hasOwnProperty;
-  if (this._ === void 0 && this.$ !== void 0 && $.ender) {
+  if (typeof module !== 'undefined' && typeof module.exports !== 'undefined' && typeof require !== 'undefined') {
+    _ = require('underscore');
+    module.exports = _;
+  } else if (this._ === void 0 && this.$ !== void 0 && $.ender) {
     this._ = $;
     this._.mixin = this.$.ender;
+  } else {
+    _ = this._;
   }
+
   'use strict';
+
+
   /*
    *
    * Copyright(c) 2011 Vladimir Dronnikov <dronnikov@gmail.com>
    * MIT Licensed
    *
   */
+
+
   _.mixin({
     isObject: function(value) {
       return value && typeof value === 'object';
     },
     ensureArray: function(value) {
       if (!value) {
-        if (value === void 0) {
-          return [];
-        } else {
-          return [value];
-        }
+        return (value === void 0 ? [] : [value]);
       }
       if (_.isString(value)) {
         return [value];
@@ -618,7 +48,7 @@
       return r;
     },
     freeze: function(obj) {
-      if (_.isObject(obj) || _.isArray(obj)) {
+      if (_.isObject(obj)) {
         Object.freeze(obj);
         _.each(obj, function(v, k) {
           return _.freeze(v);
@@ -648,12 +78,12 @@
       return Object.freeze(facet);
     },
     drill: function(obj, path, remove) {
-      var index, name, orig, part, _i, _j, _len, _len2, _ref;
+      var index, name, orig, part, _i, _j, _k, _len, _len1, _ref;
       if (_.isArray(path)) {
         if (remove) {
           _ref = path, path = 2 <= _ref.length ? __slice.call(_ref, 0, _i = _ref.length - 1) : (_i = 0, []), name = _ref[_i++];
           orig = obj;
-          for (index = 0, _len = path.length; index < _len; index++) {
+          for (index = _j = 0, _len = path.length; _j < _len; index = ++_j) {
             part = path[index];
             obj = obj && obj[part];
           }
@@ -662,8 +92,8 @@
           }
           return orig;
         } else {
-          for (_j = 0, _len2 = path.length; _j < _len2; _j++) {
-            part = path[_j];
+          for (_k = 0, _len1 = path.length; _k < _len1; _k++) {
+            part = path[_k];
             obj = obj && obj[part];
           }
           return obj;
@@ -680,6 +110,7 @@
       }
     }
   });
+
   _.mixin({
     parseDate: function(value) {
       var date, parts;
@@ -694,17 +125,24 @@
       return !!((obj != null ? obj.getTimezoneOffset : void 0) && obj.setUTCFullYear && !_.isNaN(obj.getTime()));
     }
   });
+
   'use strict';
+
+
   /*
    *
    * Copyright(c) 2011 Vladimir Dronnikov <dronnikov@gmail.com>
    * MIT Licensed
    *
   */
+
+
   /*
   	Rewrite of kriszyp's RQL https://github.com/kriszyp/rql
   	Relies on documentcloud/underscore to normalize JS
   */
+
+
   operatorMap = {
     '=': 'eq',
     '==': 'eq',
@@ -714,7 +152,9 @@
     '<=': 'le',
     '!=': 'ne'
   };
+
   Query = (function() {
+
     function Query(query, parameters) {
       var k, leftoverCharacters, removeParentProperty, term, topTerm, v;
       if (query == null) {
@@ -824,6 +264,7 @@
       };
       removeParentProperty(topTerm);
     }
+
     Query.prototype.toString = function() {
       if (this.name === 'and') {
         return _.map(this.args, queryToString).join('&');
@@ -831,16 +272,19 @@
         return queryToString(this);
       }
     };
+
     Query.prototype.where = function(query) {
       this.args = this.args.concat(new Query(query).args);
       return this;
     };
+
     Query.prototype.toSQL = function(options) {
       if (options == null) {
         options = {};
       }
       throw Error('Not implemented');
     };
+
     Query.prototype.toMongo = function(options) {
       var result, search, walk;
       if (options == null) {
@@ -987,8 +431,11 @@
       }
       return result;
     };
+
     return Query;
+
   })();
+
   stringToValue = function(string, parameters) {
     var converter, param_index, parts;
     converter = converters["default"];
@@ -997,7 +444,7 @@
       if (param_index >= 0 && parameters) {
         return parameters[param_index];
       } else {
-        return;
+        return void 0;
       }
     }
     if (string.indexOf(':') >= 0) {
@@ -1010,6 +457,7 @@
     }
     return converter(string);
   };
+
   queryToString = function(part) {
     var mapped;
     if (_.isArray(part)) {
@@ -1026,6 +474,7 @@
       return encodeValue(part);
     }
   };
+
   encodeString = function(s) {
     if (_.isString(s)) {
       s = encodeURIComponent(s);
@@ -1035,6 +484,7 @@
     }
     return s;
   };
+
   encodeValue = function(val) {
     var encoded, i, type;
     if (val === null) {
@@ -1067,6 +517,7 @@
     }
     return val;
   };
+
   autoConverted = {
     'true': true,
     'false': false,
@@ -1075,6 +526,7 @@
     'Infinity': Infinity,
     '-Infinity': -Infinity
   };
+
   converters = {
     auto: function(string) {
       var number;
@@ -1150,7 +602,9 @@
       return new RegExp(s, 'i');
     }
   };
+
   converters["default"] = converters.auto;
+
   _.each(['eq', 'ne', 'le', 'ge', 'lt', 'gt', 'between', 'in', 'nin', 'contains', 'ncontains', 'or', 'and'], function(op) {
     return Query.prototype[op] = function() {
       var args;
@@ -1162,6 +616,7 @@
       return this;
     };
   });
+
   parse = function(query, parameters) {
     var q;
     try {
@@ -1172,13 +627,18 @@
     }
     return q;
   };
+
   valid_funcs = ['eq', 'ne', 'lt', 'lte', 'gt', 'gte', 'in', 'nin', 'not', 'mod', 'all', 'size', 'exists', 'type', 'elemMatch'];
+
   requires_array = ['in', 'nin', 'all', 'mod'];
+
   valid_operators = ['or', 'and', 'not'];
+
   plusMinus = {
     sort: [1, -1],
     select: [1, 0]
   };
+
   jsOperatorMap = {
     'eq': '===',
     'ne': '!==',
@@ -1187,6 +647,7 @@
     'lt': '<',
     'gt': '>'
   };
+
   operators = {
     and: function() {
       var cond, conditions, obj, _i, _len;
@@ -1247,7 +708,7 @@
         }
       });
       return _.map(list, function(item) {
-        var i, n, s, selected, t, value, x, _i, _j, _k, _len, _len2, _len3, _ref;
+        var i, n, s, selected, t, value, x, _i, _j, _k, _len, _len1, _len2, _ref;
         if (_.isEmpty(include)) {
           selected = _.clone(item);
         } else {
@@ -1261,13 +722,11 @@
             if (_.isArray(x)) {
               t = s = selected;
               n = x.slice(-1);
-              for (_j = 0, _len2 = x.length; _j < _len2; _j++) {
+              for (_j = 0, _len1 = x.length; _j < _len1; _j++) {
                 i = x[_j];
-                                if ((_ref = t[i]) != null) {
-                  _ref;
-                } else {
+                if ((_ref = t[i]) == null) {
                   t[i] = {};
-                };
+                }
                 s = t;
                 t = t[i];
               }
@@ -1277,7 +736,7 @@
             }
           }
         }
-        for (_k = 0, _len3 = exclude.length; _k < _len3; _k++) {
+        for (_k = 0, _len2 = exclude.length; _k < _len2; _k++) {
           x = exclude[_k];
           _.drill(selected, x, true);
         }
@@ -1380,13 +839,19 @@
       });
     }
   };
+
   operators.select = operators.pick;
+
   operators.out = operators.nin;
+
   operators.excludes = operators.ncontains;
+
   operators.distinct = _.uniq;
+
   stringify = function(str) {
     return '"' + String(str).replace(/"/g, '\\"') + '"';
   };
+
   query = function(list, query, options) {
     var expr, queryToJS;
     if (options == null) {
@@ -1444,16 +909,20 @@
     };
     expr = queryToJS(query).slice(15, -1);
     if (list) {
-      return (new Function('list, operators', expr))(list, operators);
+      return (new Function('list, operators, _', expr))(list, operators, _);
     } else {
       return expr;
     }
   };
+
   _.mixin({
     rql: parse,
     query: query
   });
+
   'use strict';
+
+
   /*
   
   	JSONSchema Validator - Validates JavaScript objects using JSON Schemas
@@ -1463,18 +932,23 @@
   	Copyright (c) 2011 Vladimir Dronnikov dronnikov@gmail.com
   
   	Licensed under the MIT (MIT-LICENSE.txt) license
-  
   */
+
+
   /*
    *
    * Copyright(c) 2011 Vladimir Dronnikov <dronnikov@gmail.com>
    * MIT Licensed
    *
   */
+
+
   /*
   	Rewrite of kriszyp's json-schema validator https://github.com/kriszyp/json-schema
   	Relies on documentcloud/underscore to normalize JS
   */
+
+
   coerce = function(value, type) {
     var date;
     if (type === 'string') {
@@ -1508,8 +982,9 @@
     }
     return value;
   };
+
   validate = function(instance, schema, options, callback) {
-    var async, asyncs, checkObj, checkProp, errors, i, len, self, _changing, _fn, _len;
+    var async, asyncs, checkObj, checkProp, errors, i, len, self, _changing, _fn, _i, _len;
     if (options == null) {
       options = {};
     }
@@ -1518,7 +993,7 @@
     asyncs = [];
     errors = [];
     checkProp = function(value, schema, path, i) {
-      var addError, checkType, enumeration, itemsIsArray, propDef, v, _len;
+      var addError, checkType, enumeration, itemsIsArray, propDef, v, _i, _len;
       if (path) {
         if (_.isNumber(i)) {
           path += '[' + i + ']';
@@ -1603,7 +1078,7 @@
             if (schema.items) {
               itemsIsArray = _.isArray(schema.items);
               propDef = schema.items;
-              for (i = 0, _len = value.length; i < _len; i++) {
+              for (i = _i = 0, _len = value.length; _i < _len; i = ++_i) {
                 v = value[i];
                 if (itemsIsArray) {
                   propDef = schema.items[i];
@@ -1673,7 +1148,7 @@
       return null;
     };
     checkObj = function(instance, objTypeDef, path, additionalProp) {
-      var i, propDef, requires, value, _ref, _ref2, _ref3;
+      var i, propDef, requires, value, _ref, _ref1, _ref2;
       if (objTypeDef == null) {
         objTypeDef = {};
       }
@@ -1698,7 +1173,7 @@
             delete instance[i];
             continue;
           }
-          if (((_ref2 = options.flavor) === 'query' || _ref2 === 'get') && !options.coerce) {
+          if (((_ref1 = options.flavor) === 'query' || _ref1 === 'get') && !options.coerce) {
             continue;
           }
           if (value === void 0 && (propDef["default"] != null) && options.flavor === 'add') {
@@ -1732,7 +1207,7 @@
             });
           }
         }
-        requires = (_ref3 = objTypeDef[i]) != null ? _ref3.requires : void 0;
+        requires = (_ref2 = objTypeDef[i]) != null ? _ref2.requires : void 0;
         if (requires && !requires in instance) {
           errors.push({
             property: path,
@@ -1774,7 +1249,7 @@
           }
         });
       };
-      for (i = 0, _len = asyncs.length; i < _len; i++) {
+      for (i = _i = 0, _len = asyncs.length; _i < _len; i = ++_i) {
         async = asyncs[i];
         _fn(async);
       }
@@ -1784,8 +1259,10 @@
       return errors.length && errors || null;
     }
   };
+
   _.mixin({
     coerce: coerce,
     validate: validate
   });
+
 }).call(this);
