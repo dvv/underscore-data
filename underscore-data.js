@@ -377,6 +377,8 @@
             }
             if (_.include(valid_funcs, func)) {
               func = '$' + func;
+            } else if (func === 'out') {
+              func = '$nin';
             } else {
               return;
             }
@@ -630,7 +632,7 @@
 
   valid_funcs = ['eq', 'ne', 'lt', 'lte', 'gt', 'gte', 'in', 'nin', 'not', 'mod', 'all', 'size', 'exists', 'type', 'elemMatch'];
 
-  requires_array = ['in', 'nin', 'all', 'mod'];
+  requires_array = ['in', 'nin', 'all', 'mod', 'out'];
 
   valid_operators = ['or', 'and', 'not'];
 

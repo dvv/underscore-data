@@ -200,6 +200,9 @@ class Query
 					# valid functions are prepended with $
 					if _.include valid_funcs, func
 						func = '$'+func
+					else if func == 'out'
+						# tanslate out to $nin
+						func = '$nin'
 					else
 						#console.log 'CUSTOM', func, valid_funcs, args
 						# N.B. here we encountered a custom function
@@ -387,7 +390,7 @@ parse = (query, parameters) ->
 # valid funcs
 valid_funcs = ['eq', 'ne', 'lt', 'lte', 'gt', 'gte', 'in', 'nin', 'not', 'mod', 'all', 'size', 'exists', 'type', 'elemMatch']
 # funcs which definitely require array arguments
-requires_array = ['in', 'nin', 'all', 'mod']
+requires_array = ['in', 'nin', 'all', 'mod', 'out']
 # funcs acting as operators
 valid_operators = ['or', 'and', 'not'] #, 'xor']
 #
