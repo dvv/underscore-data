@@ -1,5 +1,5 @@
 (function() {
-  var Query, autoConverted, coerce, converters, encodeString, encodeValue, jsOperatorMap, operatorMap, operators, parse, plusMinus, query, queryToString, requires_array, stringToValue, stringify, valid_funcs, valid_operators, validate, _,
+  var Query, autoConverted, builder_clauses, builder_filters, coerce, converters, encodeString, encodeValue, jsOperatorMap, operatorMap, operators, parse, plusMinus, query, queryToString, requires_array, stringToValue, stringify, valid_funcs, valid_operators, validate, _,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty;
 
@@ -437,6 +437,53 @@
     return Query;
 
   })();
+
+  builder_clauses = ['select', 'values', 'distinct', 'limit', 'sort'];
+
+  builder_filters = ["eq", "ne", "lt", "le", "gt", "ge", "in", "out", "contains", "excludes", "and", "or"];
+
+  _.each(builder_clauses, function(o) {
+    return Query.prototype[o] = function() {
+      var a, args, _i, _len, _ref;
+      if (arguments.length === 1 && typeof arguments[0] === 'object' && arguments[0].constructor.name === 'Array') {
+        args = arguments[0];
+      } else {
+        args = Array.prototype.slice.call(arguments);
+      }
+      _ref = this.args;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        a = _ref[_i];
+        if (a.name === o) {
+          a.args = args;
+          args = null;
+          break;
+        }
+      }
+      if (args) {
+        this.args.push({
+          name: o,
+          args: args
+        });
+      }
+      return this;
+    };
+  });
+
+  _.each(builder_filters, function(o) {
+    return Query.prototype[o] = function() {
+      var args;
+      if (arguments.length === 1 && typeof arguments[0] === 'object' && arguments[0].constructor.name === 'Array') {
+        args = arguments[0];
+      } else {
+        args = Array.prototype.slice.call(arguments);
+      }
+      this.args.push({
+        name: o,
+        args: args
+      });
+      return this;
+    };
+  });
 
   stringToValue = function(string, parameters) {
     var converter, param_index, parts;

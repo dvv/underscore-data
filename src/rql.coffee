@@ -248,6 +248,36 @@ class Query
 		result.error = @error if @error
 		result
 
+builder_clauses = ['select', 'values', 'distinct', 'limit', 'sort']
+builder_filters = ["eq", "ne", "lt", "le", "gt", "ge", "in", "out", "contains", "excludes", "and", "or"]
+
+_.each builder_clauses, (o) ->
+	Query.prototype[o] = ->
+		if arguments.length == 1 and typeof arguments[0] == 'object' && arguments[0].constructor.name == 'Array'
+			args = arguments[0]
+		else
+			args = Array.prototype.slice.call(arguments)
+		
+		for a in @args
+			if a.name == o
+				a.args = args
+				args = null
+				break
+
+		if args
+			@args.push({name: o, args: args})
+		this
+
+_.each builder_filters, (o) ->
+	Query.prototype[o] = ->
+		if arguments.length == 1 and typeof arguments[0] == 'object' && arguments[0].constructor.name == 'Array'
+			args = arguments[0]
+		else
+			args = Array.prototype.slice.call(arguments)
+		
+		@args.push({name: o, args: args})
+		this
+
 stringToValue = (string, parameters) ->
 	converter = converters.default
 	if string.charAt(0) is '$'
